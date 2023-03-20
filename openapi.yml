@@ -1,0 +1,76 @@
+openapi: 3.0.0
+info:
+  version: 1.0.11
+  title: Tinkoff-Roga i Kopita Promotion API
+security:
+    - BasicAuth: []
+paths:
+  /promotions:
+    get:
+    
+      summary: Get users
+      description: Endpoint for getting participants of a joint promotion between Tinkoff and Roga i Kopita
+      security:
+      - oAuth2AuthCode: [read]
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Name of the promotion participant
+                    example: Kate
+                  surname:
+                    type: string
+                    description: Surname of the promotion participant
+                    example: Ezhova
+                  email:
+                    type: string
+                    format: email
+                    description: Email address of the promotion participant
+                    example: kate.ezhova2016@gmail.com
+                  phone_number:
+                    type: string
+                    description: Phone number of the promotion participant
+                    example: +7 (123) 456-78-90
+                  shopping_list:
+                    type: array
+                    description: List of products purchased by the participant in the promotion
+                    minItems: 1
+                    maxItems: 5
+                    items:
+                      type: object
+                      properties:
+                        product_name:
+                          type: string
+                          description: Name of the product purchased by the participant in the promotion
+                          example: "Samsung galaxy s23 ultra"
+                        price:
+                          type: number
+                          format: float
+                          minimum: 0.01
+                          description: Price of the product purchased by the participant in the promotion
+                          example: 109999.99
+         
+        '400':
+          description: Invalid value
+
+components:      
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+    oAuth2AuthCode: 
+      type: oauth2
+      flows: 
+        authorizationCode:
+          authorizationUrl: https://rogaikopita/example
+          tokenUrl: https://rogaikopita/integration/example.access
+          scopes:
+            read: Read only access
+            write: Write only access
+            admin: Admin access
